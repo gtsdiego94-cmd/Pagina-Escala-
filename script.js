@@ -204,10 +204,14 @@ function mostrarDia(dia) {
 
   const folgas = escala[dia].folgas || [];
   const postosFortes = Object.entries(escala[dia]).filter(([posto, pessoa]) => fortes.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
+  const postosOcupados = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
+  const semCobertura = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa === "SEM COBERTURA").length;
 
   document.getElementById("resumoDia").textContent = String(dia).padStart(2, "0");
   document.getElementById("resumoFolgas").textContent = folgas.length;
   document.getElementById("resumoPostos").textContent = postosFortes;
+  document.getElementById("resumoOcupados").textContent = postosOcupados;
+  document.getElementById("resumoSemCobertura").textContent = semCobertura;
   atualizarBotoesDias();
 
   let html = `<div class="painel-dia">`;

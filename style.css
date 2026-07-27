@@ -105,7 +105,7 @@ main {
 
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -286,15 +286,29 @@ table tr:nth-child(even) {
 }
 
 .posto-nome {
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(15, 108, 189, 0.1);
+  color: var(--primary-dark);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 1px rgba(15, 108, 189, 0.12);
 }
 
 .posto-pessoa {
-  margin-top: 8px;
+  margin-top: 10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(15, 23, 42, 0.08);
   font-size: 0.98rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #111827;
 }
 
@@ -323,7 +337,7 @@ table tr:nth-child(even) {
   }
 
   .summary-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .section-header {
@@ -342,7 +356,7 @@ table tr:nth-child(even) {
 
 @media (max-width: 480px) {
   .summary-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .card {
