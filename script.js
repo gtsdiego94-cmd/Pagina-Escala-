@@ -16,6 +16,8 @@ const funcionarios = [
 
 const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G13", "G12"];
 const fortes = ["G6", "G8", "G5", "G2", "G1"];
+const hoje = new Date().getDate();
+let diaSelecionado = 1;
 
 const folgasPorDia = {
   1: ["Eduardo Lima", "Dalton", "Wilson Ramos"],
@@ -162,16 +164,27 @@ function criarBotoesDias() {
     const nomeSemana = diasSemana[data.getDay()];
 
     const botao = document.createElement("button");
-
     botao.innerHTML = `
       <strong>${String(dia).padStart(2, "0")}</strong>
       <small>${nomeSemana}</small>
       <small>${String(dia).padStart(2, "0")}/07</small>
     `;
-
+    botao.dataset.dia = String(dia);
     botao.onclick = () => mostrarDia(dia);
     diasDiv.appendChild(botao);
   }
+
+  atualizarBotoesDias();
+}
+
+function atualizarBotoesDias() {
+  const botoes = document.querySelectorAll(".dias button");
+  botoes.forEach(botao => {
+    const dia = Number(botao.dataset.dia);
+    botao.classList.toggle("active", dia === diaSelecionado);
+    botao.classList.toggle("today", dia === hoje);
+    botao.setAttribute("aria-pressed", dia === diaSelecionado ? "true" : "false");
+  });
 }
 
 function mostrarDia(dia) {
@@ -179,6 +192,7 @@ function mostrarDia(dia) {
 
   const resultado = document.getElementById("resultado");
   const titulo = document.getElementById("titulo-dia");
+  diaSelecionado = dia;
 
   titulo.textContent = `Escala do dia ${String(dia).padStart(2, "0")}/07/2026`;
 
@@ -187,6 +201,14 @@ function mostrarDia(dia) {
     "🟢 Segunda rendição": ["R2"],
     "🔵 Máquinas extras": ["G10", "G11", "G13", "G12"]
   };
+
+  const folgas = escala[dia].folgas || [];
+  const postosFortes = Object.entries(escala[dia]).filter(([posto, pessoa]) => fortes.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
+
+  document.getElementById("resumoDia").textContent = String(dia).padStart(2, "0");
+  document.getElementById("resumoFolgas").textContent = folgas.length;
+  document.getElementById("resumoPostos").textContent = postosFortes;
+  atualizarBotoesDias();
 
   let html = `<div class="painel-dia">`;
 
@@ -220,8 +242,8 @@ ${
     <h3>🏖️ Folgas</h3>
     <div class="folgas-box">
       ${
-        escala[dia].folgas.length
-          ? escala[dia].folgas.map(nome => `<span>${nome}</span>`).join("")
+        folgas.length
+          ? folgas.map(nome => `<span>${nome}</span>`).join("")
           : "<span>Ninguém de folga</span>"
       }
     </div>
@@ -233,6 +255,7 @@ ${
 
 function preencherFuncionarios() {
   const select = document.getElementById("funcionarioSelect");
+  const busca = document.getElementById("funcionarioBusca");
   select.innerHTML = `<option value="">Selecione o funcionário</option>`;
 
   funcionarios.forEach(nome => {
@@ -242,14 +265,45 @@ function preencherFuncionarios() {
     select.appendChild(option);
   });
 
+  document.getElementById("resumoFuncionarios").textContent = funcionarios.length;
+
   select.addEventListener("change", () => mostrarFuncionario(select.value));
+  busca.addEventListener("input", () => filtrarFuncionarios(select, busca));
+}
+
+function filtrarFuncionarios(select, busca) {
+  const termo = busca.value.trim().toLowerCase();
+  let algumVisivel = false;
+
+  Array.from(select.options).forEach(option => {
+    if (!option.value) {
+      option.hidden = false;
+      return;
+    }
+
+    const corresponde = option.text.toLowerCase().includes(termo);
+    option.hidden = !corresponde;
+    algumVisivel = algumVisivel || corresponde;
+  });
+
+  if (!select.value || select.options[select.selectedIndex]?.hidden) {
+    const primeiroVisivel = Array.from(select.options).find(option => option.value && !option.hidden);
+    if (primeiroVisivel) {
+      select.value = primeiroVisivel.value;
+      mostrarFuncionario(primeiroVisivel.value);
+    } else {
+      mostrarFuncionario("");
+    }
+  } else if (algumVisivel) {
+    mostrarFuncionario(select.value);
+  }
 }
 
 function mostrarFuncionario(nome) {
   const div = document.getElementById("resultadoFuncionario");
 
   if (!nome) {
-    div.innerHTML = "";
+    div.innerHTML = '<div class="funcionario"><p>Digite ou selecione um funcionário para visualizar o mês.</p></div>';
     return;
   }
 
@@ -357,9 +411,11 @@ function classePosto(posto) {
   return "maquina";
 }
 
+document.getElementById("botaoHoje").addEventListener("click", () => mostrarDia(hoje));
+
 gerarEscala();
 criarBotoesDias();
 preencherFuncionarios();
-mostrarDia(1);
+mostrarDia(hoje);
 mostrarResumoFolgas();
 mostrarResumoMaquinas();

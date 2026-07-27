@@ -3,29 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escala Turno A</title>
+  <meta name="description" content="Escala operacional com visual moderno para acompanhamento diário da equipe.">
+  <title>Escala Operacional | ProtecBag</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <header>
-    <h1>Escala Turno A</h1>
-    <p>ProtecBag - Julho 2026</p>
+  <header class="hero">
+    <div class="hero-content">
+      <div>
+        <p class="eyebrow">ProtecBag • Turno A</p>
+        <h1>Escala operacional</h1>
+        <p class="hero-subtitle">Painel claro, rápido e atualizado para acompanhar a rotina da equipe.</p>
+      </div>
+      <div class="hero-badge">Julho 2026</div>
+    </div>
   </header>
 
   <main>
+    <section class="card summary-card">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">Funcionários</span>
+          <strong id="resumoFuncionarios">13</strong>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Dia selecionado</span>
+          <strong id="resumoDia">01</strong>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Folgas</span>
+          <strong id="resumoFolgas">0</strong>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Postos fortes</span>
+          <strong id="resumoPostos">0</strong>
+        </div>
+      </div>
+    </section>
+
     <section class="card">
-      <h2>Escolha o dia</h2>
+      <div class="section-header">
+        <div>
+          <h2>Escolha o dia</h2>
+          <p>Selecione um dia para visualizar a escala e os colaboradores em folga.</p>
+        </div>
+        <button id="botaoHoje" class="ghost-btn" type="button">Hoje</button>
+      </div>
       <div id="dias" class="dias"></div>
     </section>
 
     <section class="card">
-      <h2 id="titulo-dia">Escala do dia</h2>
+      <div class="section-header">
+        <div>
+          <h2 id="titulo-dia">Escala do dia</h2>
+          <p>Acompanhe cada posto com destaque visual para leitura rápida.</p>
+        </div>
+      </div>
       <div id="resultado"></div>
     </section>
 
     <section class="card">
-      <h2>Consultar por funcionário</h2>
+      <div class="section-header">
+        <div>
+          <h2>Consultar por funcionário</h2>
+          <p>Busque pelo nome e veja como o colaborador está distribuído no mês.</p>
+        </div>
+      </div>
+      <input id="funcionarioBusca" class="search-input" type="text" placeholder="Busque por nome...">
       <select id="funcionarioSelect">
         <option value="">Selecione o funcionário</option>
       </select>
