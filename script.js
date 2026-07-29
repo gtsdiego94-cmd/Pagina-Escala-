@@ -11,12 +11,14 @@ const funcionarios = [
   "João Paulo",
   "Kauã Geraldo dos Santos",
   "Eric da Conceição",
-  "Victor Costa"
+  "Victor Costa",
+  "Mateus Santos"
 ];
 
 const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G13", "G12"];
 const fortes = ["G6", "G8", "G5", "G2", "G1"];
-const hoje = new Date().getDate();
+const hojeData = new Date();
+const hoje = hojeData.getDate();
 let diaSelecionado = 1;
 
 const folgasPorDia = {
@@ -53,7 +55,41 @@ const folgasPorDia = {
   31: ["João Paulo"]
 };
 
-const escalaManual = {
+const folgasPorDiaAgosto = {
+  1: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Eduardo Lima", "Kauan Santos", "Erick da Conceição"],
+  2: ["Matheus Senhorinho", "Wilson Ramos", "Pedro", "Eduardo Lima", "João Paulo", "Erick da Conceição", "Victor Costa"],
+  3: ["Matheus Senhorinho", "Wilson Ramos", "Kauan Santos", "Mateus Santos"],
+  4: ["Ricardo Lima", "Dalton", "Erick da Conceição"],
+  5: ["Lucas Trindade", "Pedro", "Mateus Santos"],
+  6: ["Matheus Senhorinho", "João Paulo", "Kauan Geraldo Santos"],
+  7: ["Danilo Pereira dos Santos", "Eduardo Lima", "Kauan Geraldo Santos", "Victor Costa"],
+  8: ["Lucas Trindade", "Wilson Ramos", "Dalton"],
+  9: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Dalton"],
+  10: ["Ricardo Lima", "Danilo Pereira dos Santos", "Erick da Conceição", "Victor Costa"],
+  11: ["Pedro", "João Paulo", "Kauan Geraldo Santos", "Mateus Santos"],
+  12: ["Matheus Senhorinho", "Dalton", "Eduardo Lima"],
+  13: ["Wilson Ramos", "Danilo Pereira dos Santos", "Eduardo Lima"],
+  14: ["Lucas Trindade", "Ricardo Lima", "Erick da Conceição"],
+  15: ["João Paulo", "Kauan Geraldo Santos", "Mateus Santos", "Victor Costa"],
+  16: ["Eduardo Lima", "João Paulo", "Kauan Geraldo Santos", "Mateus Santos", "Victor Costa"],
+  17: ["Lucas Trindade", "Pedro"],
+  18: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Dalton"],
+  19: ["Wilson Ramos", "Kauan Geraldo Santos", "Erick da Conceição"],
+  20: ["Ricardo Lima", "João Paulo", "Mateus Santos"],
+  21: ["Eduardo Lima", "Mateus Santos", "Victor Costa"],
+  22: ["Lucas Trindade", "Matheus Senhorinho", "Pedro", "Erick da Conceição"],
+  23: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Pedro", "Erick da Conceição"],
+  24: ["Danilo Pereira dos Santos", "Dalton"],
+  25: ["Ricardo Lima", "João Paulo", "Kauan Geraldo Santos"],
+  26: ["Wilson Ramos", "João Paulo", "Victor Costa"],
+  27: ["Danilo Pereira dos Santos", "Eduardo Lima", "Mateus Santos", "Victor Costa"],
+  28: ["Matheus Senhorinho", "Pedro", "Erick da Conceição"],
+  29: ["Lucas Trindade", "Ricardo Lima", "Dalton"],
+  30: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Dalton"],
+  31: ["João Paulo", "Kauan Geraldo Santos"]
+};
+
+const escalaManualJulho = {
   1: {
     G6: "Lucas Trindade",
     G8: "Matheus Senhorinho",
@@ -69,10 +105,39 @@ const escalaManual = {
   }
 };
 
+const mesesDisponiveis = {
+  julho: {
+    label: "Julho 2026",
+    ano: 2026,
+    mes: 6,
+    folgasPorDia,
+    escalaManual: escalaManualJulho,
+    observacoes: {}
+  },
+  agosto: {
+    label: "Agosto 2026",
+    ano: 2026,
+    mes: 7,
+    folgasPorDia: folgasPorDiaAgosto,
+    escalaManual: {},
+    observacoes: {}
+  }
+};
+
 let escala = {};
 let contagem = {};
 let diaAtual = 1;
 let statusPresenca = {};
+let mesSelecionado = "julho";
+
+function normalizarNome(nome) {
+  if (!nome) return nome;
+
+  return nome
+    .replace(/kauan\s+geraldo\s+santos/i, "Kauã Geraldo dos Santos")
+    .replace(/kauan\s+santos/i, "Khauan Santos")
+    .replace(/erick\s+da\s+conceição/i, "Eric da Conceição");
+}
 
 function confirmarChegada(posto) {
   if (!statusPresenca[diaAtual]) statusPresenca[diaAtual] = {};
@@ -89,15 +154,19 @@ function iniciarContagem() {
   });
 }
 
-function gerarEscala() {
+function gerarEscala(mesKey = mesSelecionado) {
+  const configMes = mesesDisponiveis[mesKey];
+  const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
+
   iniciarContagem();
+  escala = {};
 
-  for (let dia = 1; dia <= 31; dia++) {
+  for (let dia = 1; dia <= totalDias; dia++) {
     escala[dia] = {};
-    const folgas = folgasPorDia[dia] || [];
+    const folgas = (configMes.folgasPorDia[dia] || []).map(normalizarNome);
 
-    if (escalaManual[dia]) {
-      escala[dia] = { ...escalaManual[dia], folgas };
+    if (configMes.escalaManual[dia]) {
+      escala[dia] = { ...configMes.escalaManual[dia], folgas };
       registrarContagem(dia);
       continue;
     }
@@ -157,17 +226,19 @@ function criarBotoesDias() {
   const diasDiv = document.getElementById("dias");
   diasDiv.innerHTML = "";
 
+  const configMes = mesesDisponiveis[mesSelecionado];
+  const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
   const diasSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
-  for (let dia = 1; dia <= 31; dia++) {
-    const data = new Date(2026, 6, dia);
+  for (let dia = 1; dia <= totalDias; dia++) {
+    const data = new Date(configMes.ano, configMes.mes, dia);
     const nomeSemana = diasSemana[data.getDay()];
 
     const botao = document.createElement("button");
     botao.innerHTML = `
       <strong>${String(dia).padStart(2, "0")}</strong>
       <small>${nomeSemana}</small>
-      <small>${String(dia).padStart(2, "0")}/07</small>
+      <small>${String(dia).padStart(2, "0")}/${String(configMes.mes + 1).padStart(2, "0")}</small>
     `;
     botao.dataset.dia = String(dia);
     botao.onclick = () => mostrarDia(dia);
@@ -181,8 +252,9 @@ function atualizarBotoesDias() {
   const botoes = document.querySelectorAll(".dias button");
   botoes.forEach(botao => {
     const dia = Number(botao.dataset.dia);
+    const eMesAtual = mesesDisponiveis[mesSelecionado].mes === hojeData.getMonth();
     botao.classList.toggle("active", dia === diaSelecionado);
-    botao.classList.toggle("today", dia === hoje);
+    botao.classList.toggle("today", dia === hoje && eMesAtual);
     botao.setAttribute("aria-pressed", dia === diaSelecionado ? "true" : "false");
   });
 }
@@ -194,7 +266,9 @@ function mostrarDia(dia) {
   const titulo = document.getElementById("titulo-dia");
   diaSelecionado = dia;
 
-  titulo.textContent = `Escala do dia ${String(dia).padStart(2, "0")}/07/2026`;
+  const configMes = mesesDisponiveis[mesSelecionado];
+  const mesNumero = String(configMes.mes + 1).padStart(2, "0");
+  titulo.textContent = `Escala do dia ${String(dia).padStart(2, "0")}/${mesNumero}/${configMes.ano}`;
 
   const grupos = {
     "🔥 Prioridade mínima": ["G6", "G8", "G5", "G2", "G1", "R1"],
@@ -206,6 +280,7 @@ function mostrarDia(dia) {
   const postosFortes = Object.entries(escala[dia]).filter(([posto, pessoa]) => fortes.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
   const postosOcupados = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
   const semCobertura = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa === "SEM COBERTURA").length;
+  const observacoes = mesSelecionado === "agosto" && dia >= 3 ? ["Kauã Santos em férias a partir do dia 3."] : [];
 
   document.getElementById("resumoDia").textContent = String(dia).padStart(2, "0");
   document.getElementById("resumoFolgas").textContent = folgas.length;
@@ -252,6 +327,10 @@ ${
       }
     </div>
   `;
+
+  if (observacoes.length) {
+    html += `<div class="observacoes-box"><strong>Observação:</strong> ${observacoes.join(" ")}</div>`;
+  }
 
   html += `</div>`;
   resultado.innerHTML = html;
@@ -331,7 +410,7 @@ function mostrarResumoFolgas() {
   const main = document.querySelector("main");
 
   let html = `
-    <section class="card">
+    <section class="card resumo-mes-section">
       <h2>Resumo do mês</h2>
       <table>
         <tr>
@@ -367,7 +446,7 @@ function mostrarResumoMaquinas() {
   const main = document.querySelector("main");
 
   let html = `
-    <section class="card">
+    <section class="card resumo-mes-section">
       <h2>Quantidade por máquina</h2>
       <table>
         <tr>
@@ -415,11 +494,39 @@ function classePosto(posto) {
   return "maquina";
 }
 
-document.getElementById("botaoHoje").addEventListener("click", () => mostrarDia(hoje));
+function renderizarResumos() {
+  document.querySelectorAll(".resumo-mes-section").forEach(secao => secao.remove());
+  mostrarResumoFolgas();
+  mostrarResumoMaquinas();
+}
+
+function configurarSelectorMes() {
+  const botao = document.getElementById("botaoMes");
+  const menu = document.getElementById("menuMes");
+  const select = document.getElementById("mesSelect");
+
+  botao.addEventListener("click", () => {
+    menu.hidden = !menu.hidden;
+  });
+
+  select.addEventListener("change", () => {
+    mesSelecionado = select.value;
+    menu.hidden = true;
+    botao.textContent = `Mês: ${mesesDisponiveis[mesSelecionado].label}`;
+    gerarEscala(mesSelecionado);
+    criarBotoesDias();
+    preencherFuncionarios();
+    mostrarDia(1);
+    renderizarResumos();
+  });
+
+  botao.textContent = `Mês: ${mesesDisponiveis[mesSelecionado].label}`;
+  select.value = mesSelecionado;
+}
 
 gerarEscala();
 criarBotoesDias();
 preencherFuncionarios();
+configurarSelectorMes();
 mostrarDia(hoje);
-mostrarResumoFolgas();
-mostrarResumoMaquinas();
+renderizarResumos();

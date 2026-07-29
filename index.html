@@ -55,7 +55,15 @@
           <h2>Escolha o dia</h2>
           <p>Selecione um dia para visualizar a escala e os colaboradores em folga.</p>
         </div>
-        <button id="botaoHoje" class="ghost-btn" type="button">Hoje</button>
+        <div class="mes-selector">
+          <button id="botaoMes" class="ghost-btn" type="button">Mês</button>
+          <div id="menuMes" class="mes-menu" hidden>
+            <select id="mesSelect">
+              <option value="julho">Julho 2026</option>
+              <option value="agosto">Agosto 2026</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div id="dias" class="dias"></div>
     </section>
