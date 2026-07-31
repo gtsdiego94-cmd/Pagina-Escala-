@@ -102,6 +102,32 @@ const escalaManualJulho = {
     G11: "João Paulo",
     G13: "Fechada",
     G12: "Geraldo"
+  },
+  4: {
+    G6: "Eric da Conceição",
+    G8: "Danilo Pereira dos Santos",
+    G5: "Lucas Trindade",
+    G2: "Miranda",
+    G1: "João Paulo",
+    R1: "Wilson Ramos",
+    R2: "Matheus Senhorinho",
+    G10: "Fechada",
+    G11: "Fechada",
+    G13: "Mateus Santos",
+    G12: "Fechada"
+  },
+  5: {
+    G6: "Wilson Ramos",
+    G8: "Eric da Conceição",
+    G5: "Matheus Senhorinho",
+    G2: "Danilo Pereira dos Santos",
+    G1: "Lucas Trindade",
+    R1: "Miranda",
+    R2: "João Paulo",
+    G10: "Fechada",
+    G11: "Fechada",
+    G13: "Mateus Santos",
+    G12: "Fechada"
   }
 };
 
