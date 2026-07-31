@@ -4,12 +4,12 @@ const funcionarios = [
   "Wilson Ramos",
   "Ricardo Lima",
   "Danilo Pereira dos Santos",
-  "Khauan Santos",
+  "Miranda",
   "Dalton",
   "Pedro",
   "Eduardo Lima",
   "João Paulo",
-  "Kauã Geraldo dos Santos",
+  "Geraldo",
   "Eric da Conceição",
   "Victor Costa",
   "Mateus Santos"
@@ -23,31 +23,31 @@ let diaSelecionado = 1;
 
 const folgasPorDia = {
   1: ["Eduardo Lima", "Dalton", "Wilson Ramos"],
-  2: ["Khauan Santos", "João Paulo"],
+  2: ["Miranda", "João Paulo"],
   3: ["Lucas Trindade", "Danilo Pereira dos Santos", "Eric da Conceição"],
-  4: ["Ricardo Lima", "Dalton", "Pedro", "Eduardo Lima", "Kauã Geraldo dos Santos", "Victor Costa"],
-  5: ["Wilson Ramos", "Ricardo Lima", "Dalton", "Pedro", "Eduardo Lima", "Kauã Geraldo dos Santos", "Victor Costa"],
+  4: ["Ricardo Lima", "Dalton", "Pedro", "Eduardo Lima", "Geraldo", "Victor Costa"],
+  5: ["Wilson Ramos", "Ricardo Lima", "Dalton", "Pedro", "Eduardo Lima", "Geraldo", "Victor Costa"],
   6: ["Matheus Senhorinho", "João Paulo", "Eric da Conceição"],
-  7: ["Khauan Santos", "Pedro"],
+  7: ["Miranda", "Pedro"],
   8: ["Danilo Pereira dos Santos", "Dalton", "Victor Costa"],
-  9: ["Lucas Trindade", "Ricardo Lima", "Kauã Geraldo dos Santos"],
+  9: ["Lucas Trindade", "Ricardo Lima", "Geraldo"],
   10: ["Lucas Trindade", "Wilson Ramos", "João Paulo"],
-  11: ["Matheus Senhorinho", "Wilson Ramos", "Khauan Santos", "Eduardo Lima"],
-  12: ["Matheus Senhorinho", "Wilson Ramos", "Danilo Pereira dos Santos", "Khauan Santos", "Eduardo Lima", "Eric da Conceição"],
+  11: ["Matheus Senhorinho", "Wilson Ramos", "Miranda", "Eduardo Lima"],
+  12: ["Matheus Senhorinho", "Wilson Ramos", "Danilo Pereira dos Santos", "Miranda", "Eduardo Lima", "Eric da Conceição"],
   13: ["Danilo Pereira dos Santos", "Pedro", "Eric da Conceição"],
   14: ["Lucas Trindade", "Dalton", "Eric da Conceição"],
-  15: ["Ricardo Lima", "João Paulo", "Kauã Geraldo dos Santos", "Victor Costa"],
+  15: ["Ricardo Lima", "João Paulo", "Geraldo", "Victor Costa"],
   16: ["Wilson Ramos", "Eduardo Lima"],
-  17: ["Matheus Senhorinho", "Khauan Santos"],
+  17: ["Matheus Senhorinho", "Miranda"],
   18: ["Lucas Trindade", "Dalton", "Pedro", "João Paulo"],
   19: ["Lucas Trindade", "Danilo Pereira dos Santos", "Dalton", "Pedro", "João Paulo"],
-  20: ["Danilo Pereira dos Santos", "Eduardo Lima", "Kauã Geraldo dos Santos"],
+  20: ["Danilo Pereira dos Santos", "Eduardo Lima", "Geraldo"],
   21: ["Matheus Senhorinho", "Ricardo Lima", "Eric da Conceição", "Victor Costa"],
   22: ["Wilson Ramos", "Pedro"],
-  23: ["Khauan Santos", "Dalton", "Eduardo Lima"],
+  23: ["Miranda", "Dalton", "Eduardo Lima"],
   24: ["Lucas Trindade", "Danilo Pereira dos Santos", "João Paulo"],
-  25: ["Matheus Senhorinho", "Ricardo Lima", "Khauan Santos", "Kauã Geraldo dos Santos", "Victor Costa"],
-  26: ["Matheus Senhorinho", "Ricardo Lima", "Khauan Santos", "Kauã Geraldo dos Santos", "Victor Costa"],
+  25: ["Matheus Senhorinho", "Ricardo Lima", "Miranda", "Geraldo", "Victor Costa"],
+  26: ["Matheus Senhorinho", "Ricardo Lima", "Miranda", "Geraldo", "Victor Costa"],
   27: ["Pedro", "Eric da Conceição"],
   28: ["Wilson Ramos", "Eric da Conceição"],
   29: ["Dalton", "Eduardo Lima"],
@@ -56,37 +56,37 @@ const folgasPorDia = {
 };
 
 const folgasPorDiaAgosto = {
-  1: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Eduardo Lima", "Kauan Santos", "Erick da Conceição"],
-  2: ["Matheus Senhorinho", "Wilson Ramos", "Pedro", "Eduardo Lima", "João Paulo", "Erick da Conceição", "Victor Costa"],
-  3: ["Matheus Senhorinho", "Wilson Ramos", "Kauan Santos", "Mateus Santos"],
-  4: ["Ricardo Lima", "Dalton", "Erick da Conceição"],
+  1: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Eduardo Lima", "Miranda", "Eric da Conceição"],
+  2: ["Matheus Senhorinho", "Wilson Ramos", "Pedro", "Eduardo Lima", "João Paulo", "Eric da Conceição", "Victor Costa"],
+  3: ["Matheus Senhorinho", "Wilson Ramos", "Miranda", "Mateus Santos"],
+  4: ["Ricardo Lima", "Dalton", "Eric da Conceição"],
   5: ["Lucas Trindade", "Pedro", "Mateus Santos"],
-  6: ["Matheus Senhorinho", "João Paulo", "Kauan Geraldo Santos"],
-  7: ["Danilo Pereira dos Santos", "Eduardo Lima", "Kauan Geraldo Santos", "Victor Costa"],
+  6: ["Matheus Senhorinho", "João Paulo", "Geraldo"],
+  7: ["Danilo Pereira dos Santos", "Eduardo Lima", "Geraldo", "Victor Costa"],
   8: ["Lucas Trindade", "Wilson Ramos", "Dalton"],
   9: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Dalton"],
-  10: ["Ricardo Lima", "Danilo Pereira dos Santos", "Erick da Conceição", "Victor Costa"],
-  11: ["Pedro", "João Paulo", "Kauan Geraldo Santos", "Mateus Santos"],
+  10: ["Ricardo Lima", "Danilo Pereira dos Santos", "Eric da Conceição", "Victor Costa"],
+  11: ["Pedro", "João Paulo", "Geraldo", "Mateus Santos"],
   12: ["Matheus Senhorinho", "Dalton", "Eduardo Lima"],
   13: ["Wilson Ramos", "Danilo Pereira dos Santos", "Eduardo Lima"],
-  14: ["Lucas Trindade", "Ricardo Lima", "Erick da Conceição"],
-  15: ["João Paulo", "Kauan Geraldo Santos", "Mateus Santos", "Victor Costa"],
-  16: ["Eduardo Lima", "João Paulo", "Kauan Geraldo Santos", "Mateus Santos", "Victor Costa"],
+  14: ["Lucas Trindade", "Ricardo Lima", "Eric da Conceição"],
+  15: ["João Paulo", "Geraldo", "Mateus Santos", "Victor Costa"],
+  16: ["Eduardo Lima", "João Paulo", "Geraldo", "Mateus Santos", "Victor Costa"],
   17: ["Lucas Trindade", "Pedro"],
   18: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Dalton"],
-  19: ["Wilson Ramos", "Kauan Geraldo Santos", "Erick da Conceição"],
+  19: ["Wilson Ramos", "Geraldo", "Eric da Conceição"],
   20: ["Ricardo Lima", "João Paulo", "Mateus Santos"],
   21: ["Eduardo Lima", "Mateus Santos", "Victor Costa"],
-  22: ["Lucas Trindade", "Matheus Senhorinho", "Pedro", "Erick da Conceição"],
-  23: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Pedro", "Erick da Conceição"],
+  22: ["Lucas Trindade", "Matheus Senhorinho", "Pedro", "Eric da Conceição"],
+  23: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Pedro", "Eric da Conceição"],
   24: ["Danilo Pereira dos Santos", "Dalton"],
-  25: ["Ricardo Lima", "João Paulo", "Kauan Geraldo Santos"],
+  25: ["Ricardo Lima", "João Paulo", "Geraldo"],
   26: ["Wilson Ramos", "João Paulo", "Victor Costa"],
   27: ["Danilo Pereira dos Santos", "Eduardo Lima", "Mateus Santos", "Victor Costa"],
-  28: ["Matheus Senhorinho", "Pedro", "Erick da Conceição"],
+  28: ["Matheus Senhorinho", "Pedro", "Eric da Conceição"],
   29: ["Lucas Trindade", "Ricardo Lima", "Dalton"],
   30: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Dalton"],
-  31: ["João Paulo", "Kauan Geraldo Santos"]
+  31: ["João Paulo", "Geraldo"]
 };
 
 const escalaManualJulho = {
@@ -97,11 +97,11 @@ const escalaManualJulho = {
     G2: "Victor Costa",
     G1: "Eric da Conceição",
     R1: "Danilo Pereira dos Santos",
-    R2: "Khauan Santos",
+    R2: "Miranda",
     G10: "Pedro",
     G11: "João Paulo",
     G13: "Fechada",
-    G12: "Kauã Geraldo dos Santos"
+    G12: "Geraldo"
   }
 };
 
@@ -133,9 +133,10 @@ let mesSelecionado = "julho";
 function normalizarNome(nome) {
   if (!nome) return nome;
 
-  return nome
-    .replace(/kauan\s+geraldo\s+santos/i, "Kauã Geraldo dos Santos")
-    .replace(/kauan\s+santos/i, "Khauan Santos")
+  return String(nome)
+    .replace(/khauan\s+santos/i, "Miranda")
+    .replace(/kauan\s+santos/i, "Miranda")
+    .replace(/kau[aã]\s+geraldo(?:\s+dos)?\s+santos/i, "Geraldo")
     .replace(/erick\s+da\s+conceição/i, "Eric da Conceição");
 }
 
@@ -164,6 +165,10 @@ function gerarEscala(mesKey = mesSelecionado) {
   for (let dia = 1; dia <= totalDias; dia++) {
     escala[dia] = {};
     const folgas = (configMes.folgasPorDia[dia] || []).map(normalizarNome);
+
+    if (mesKey === "agosto" && dia >= 3 && !folgas.includes("Miranda")) {
+      folgas.push("Miranda");
+    }
 
     if (configMes.escalaManual[dia]) {
       escala[dia] = { ...configMes.escalaManual[dia], folgas };
@@ -280,7 +285,7 @@ function mostrarDia(dia) {
   const postosFortes = Object.entries(escala[dia]).filter(([posto, pessoa]) => fortes.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
   const postosOcupados = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
   const semCobertura = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa === "SEM COBERTURA").length;
-  const observacoes = mesSelecionado === "agosto" && dia >= 3 ? ["Kauã Santos em férias a partir do dia 3."] : [];
+  const observacoes = mesSelecionado === "agosto" && dia >= 3 ? ["Miranda em férias a partir do dia 3."] : [];
 
   document.getElementById("resumoDia").textContent = String(dia).padStart(2, "0");
   document.getElementById("resumoFolgas").textContent = folgas.length;
@@ -384,6 +389,9 @@ function filtrarFuncionarios(select, busca) {
 
 function mostrarFuncionario(nome) {
   const div = document.getElementById("resultadoFuncionario");
+  const configMes = mesesDisponiveis[mesSelecionado];
+  const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
+  const mesNumero = String(configMes.mes + 1).padStart(2, "0");
 
   if (!nome) {
     div.innerHTML = '<div class="funcionario"><p>Digite ou selecione um funcionário para visualizar o mês.</p></div>';
@@ -392,14 +400,14 @@ function mostrarFuncionario(nome) {
 
   let html = `<div class="funcionario"><strong>${nome}</strong><br><br>`;
 
-  for (let dia = 1; dia <= 31; dia++) {
+  for (let dia = 1; dia <= totalDias; dia++) {
     let postoDoFuncionario = "Folga";
 
     if (!escala[dia].folgas.includes(nome)) {
       postoDoFuncionario = postos.find(posto => escala[dia][posto] === nome) || "Apoio";
     }
 
-    html += `${String(dia).padStart(2, "0")}/07 - <span class="${classePosto(postoDoFuncionario)}">${postoDoFuncionario}</span><br>`;
+    html += `${String(dia).padStart(2, "0")}/${mesNumero} - <span class="${classePosto(postoDoFuncionario)}">${postoDoFuncionario}</span><br>`;
   }
 
   html += "</div>";
@@ -420,11 +428,14 @@ function mostrarResumoFolgas() {
         </tr>
   `;
 
+  const configMes = mesesDisponiveis[mesSelecionado];
+  const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
+
   funcionarios.forEach(nome => {
     let folgas = 0;
     let trabalhados = 0;
 
-    for (let dia = 1; dia <= 31; dia++) {
+    for (let dia = 1; dia <= totalDias; dia++) {
       if (escala[dia].folgas.includes(nome)) folgas++;
       else trabalhados++;
     }
@@ -459,13 +470,16 @@ function mostrarResumoMaquinas() {
 
   html += `<th>Prioridade</th></tr>`;
 
+  const configMes = mesesDisponiveis[mesSelecionado];
+  const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
+
   funcionarios.forEach(nome => {
     html += `<tr><td>${nome}</td>`;
 
     postos.forEach(posto => {
       let qtd = 0;
 
-      for (let dia = 1; dia <= 31; dia++) {
+      for (let dia = 1; dia <= totalDias; dia++) {
         if (escala[dia][posto] === nome) qtd++;
       }
 
@@ -474,7 +488,7 @@ function mostrarResumoMaquinas() {
 
     let totalFortes = 0;
 
-    for (let dia = 1; dia <= 31; dia++) {
+    for (let dia = 1; dia <= totalDias; dia++) {
       fortes.forEach(posto => {
         if (escala[dia][posto] === nome) totalFortes++;
       });
