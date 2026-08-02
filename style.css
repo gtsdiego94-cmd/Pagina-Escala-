@@ -59,6 +59,28 @@ body {
   max-width: 720px;
 }
 
+.hero-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.hero-logo {
+  width: 52px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+.hero-brand-name {
+  display: block;
+  color: white;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .hero-subtitle {
   margin-top: 8px;
   font-size: 1.02rem;
