@@ -128,6 +128,73 @@ main {
   font-size: 0.95rem;
 }
 
+.metas-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.meta-intro,
+.meta-note {
+  padding: 14px 16px;
+  background: rgba(15, 23, 42, 0.02);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.meta-intro p,
+.meta-note p {
+  margin: 0;
+}
+
+.metas-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.metas-table th,
+.metas-table td {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.metas-table thead th {
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+  color: white;
+  font-weight: 700;
+}
+
+.metas-table tbody tr {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.metas-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.metas-table tbody td {
+  color: var(--text);
+}
+
+.metas-table tbody tr:nth-child(odd) {
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.metas-table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.metas-table td:first-child {
+  font-weight: 700;
+}
+
 .summary-card {
   padding: 18px 20px;
 }
