@@ -39,66 +39,100 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  top: 44px;
-  height: 72px;
+  top: 42px;
+  height: 96px;
   pointer-events: none;
   overflow: hidden;
 }
 
 .luggage {
   position: absolute;
-  left: -80px;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  left: -72px;
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.32);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 1.35rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
-  animation: luggageMove 14s linear infinite;
+  color: rgba(15, 23, 42, 0.95);
+  font-size: 1.5rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  animation: luggageMove 8s ease-in-out infinite;
 }
 
 .luggage:nth-child(1) {
-  top: 0;
+  top: 8px;
   animation-delay: 0s;
 }
 
 .luggage:nth-child(2) {
-  top: 18px;
-  animation-delay: 3s;
-  width: 42px;
-  height: 42px;
+  top: 22px;
+  animation-delay: 2.2s;
+  width: 46px;
+  height: 46px;
 }
 
 .luggage:nth-child(3) {
   top: 36px;
-  animation-delay: 6s;
+  animation-delay: 4.4s;
   width: 40px;
   height: 40px;
 }
 
+.runner {
+  position: absolute;
+  left: -80px;
+  top: 42px;
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  animation: runnerMove 8s ease-in-out infinite;
+}
+
 @keyframes luggageMove {
   0% {
-    transform: translateX(-150%) scale(0.95);
-    opacity: 0.2;
-  }
-  10% {
-    opacity: 0.5;
-  }
-  50% {
-    transform: translateX(120vw) scale(1.05);
-    opacity: 0.85;
-  }
-  90% {
+    transform: translateX(-140%) rotate(0deg);
     opacity: 0.35;
   }
+  30% {
+    transform: translateX(12vw) rotate(2deg);
+    opacity: 0.9;
+  }
+  60% {
+    transform: translateX(65vw) rotate(-2deg);
+    opacity: 0.9;
+  }
   100% {
-    transform: translateX(180vw) scale(0.95);
-    opacity: 0.2;
+    transform: translateX(140vw) rotate(4deg);
+    opacity: 0.35;
+  }
+}
+
+@keyframes runnerMove {
+  0% {
+    transform: translateX(-120%) translateY(0);
+    opacity: 0.9;
+  }
+  30% {
+    transform: translateX(10vw) translateY(-6px);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(45vw) translateY(4px);
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(85vw) translateY(-6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(165vw) translateY(2px);
+    opacity: 0.6;
   }
 }
 
