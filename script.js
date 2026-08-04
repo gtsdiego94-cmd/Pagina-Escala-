@@ -19,71 +19,81 @@ const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G13", "
 const fortes = ["G6", "G8", "G5", "G2", "G1"];
 const hojeData = new Date();
 const hoje = hojeData.getDate();
+const mesAtual = hojeData.getMonth();
+const anoAtual = hojeData.getFullYear();
 let diaSelecionado = 1;
+
+function obterDiaParaMostrar() {
+  const configMes = mesesDisponiveis[mesSelecionado];
+  if (configMes.mes === mesAtual && configMes.ano === anoAtual) {
+    return hoje;
+  }
+  return 1;
+}
 
 const folgasPorDia = {
   1: ["Eduardo Lima", "Dalton", "Wilson Ramos"],
   2: ["Miranda", "João Paulo"],
-  3: ["Lucas Trindade", "Danilo Pereira dos Santos", "Eric da Conceição"],
+  3: ["Lucas Trindade", "Danilo Pereira dos Santos"],
   4: ["Ricardo Lima", "Dalton", "Pedro", "Eduardo Lima", "Geraldo", "Victor Costa"],
   5: ["Wilson Ramos", "Ricardo Lima", "Dalton", "Pedro", "Eduardo Lima", "Geraldo", "Victor Costa"],
-  6: ["Matheus Senhorinho", "João Paulo", "Eric da Conceição"],
+  6: ["Matheus Senhorinho", "João Paulo"],
   7: ["Miranda", "Pedro"],
   8: ["Danilo Pereira dos Santos", "Dalton", "Victor Costa"],
   9: ["Lucas Trindade", "Ricardo Lima", "Geraldo"],
   10: ["Lucas Trindade", "Wilson Ramos", "João Paulo"],
   11: ["Matheus Senhorinho", "Wilson Ramos", "Miranda", "Eduardo Lima"],
-  12: ["Matheus Senhorinho", "Wilson Ramos", "Danilo Pereira dos Santos", "Miranda", "Eduardo Lima", "Eric da Conceição"],
-  13: ["Danilo Pereira dos Santos", "Pedro", "Eric da Conceição"],
-  14: ["Lucas Trindade", "Dalton", "Eric da Conceição"],
+  12: ["Matheus Senhorinho", "Wilson Ramos", "Danilo Pereira dos Santos", "Miranda", "Eduardo Lima"],
+  13: ["Danilo Pereira dos Santos", "Pedro"],
+  14: ["Lucas Trindade", "Dalton"],
   15: ["Ricardo Lima", "João Paulo", "Geraldo", "Victor Costa"],
   16: ["Wilson Ramos", "Eduardo Lima"],
   17: ["Matheus Senhorinho", "Miranda"],
   18: ["Lucas Trindade", "Dalton", "Pedro", "João Paulo"],
   19: ["Lucas Trindade", "Danilo Pereira dos Santos", "Dalton", "Pedro", "João Paulo"],
   20: ["Danilo Pereira dos Santos", "Eduardo Lima", "Geraldo"],
-  21: ["Matheus Senhorinho", "Ricardo Lima", "Eric da Conceição", "Victor Costa"],
+  21: ["Matheus Senhorinho", "Ricardo Lima", "Victor Costa"],
   22: ["Wilson Ramos", "Pedro"],
   23: ["Miranda", "Dalton", "Eduardo Lima"],
   24: ["Lucas Trindade", "Danilo Pereira dos Santos", "João Paulo"],
   25: ["Matheus Senhorinho", "Ricardo Lima", "Miranda", "Geraldo", "Victor Costa"],
   26: ["Matheus Senhorinho", "Ricardo Lima", "Miranda", "Geraldo", "Victor Costa"],
-  27: ["Pedro", "Eric da Conceição"],
-  28: ["Wilson Ramos", "Eric da Conceição"],
+  27: ["Pedro"],
+  28: ["Wilson Ramos"],
   29: ["Dalton", "Eduardo Lima"],
   30: ["Lucas Trindade", "Danilo Pereira dos Santos", "João Paulo"],
   31: ["João Paulo"]
 };
 
 const folgasPorDiaAgosto = {
-  1: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Eduardo Lima", "Miranda", "Eric da Conceição"],
-  2: ["Matheus Senhorinho", "Wilson Ramos", "Pedro", "Eduardo Lima", "João Paulo", "Eric da Conceição", "Victor Costa"],
+  1: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Eduardo Lima", "Miranda"],
+  2: ["Matheus Senhorinho", "Wilson Ramos", "Pedro", "Eduardo Lima", "João Paulo", "Victor Costa"],
   3: ["Matheus Senhorinho", "Wilson Ramos", "Miranda", "Mateus Santos"],
-  4: ["Ricardo Lima", "Dalton", "Eric da Conceição"],
+  4: ["Ricardo Lima", "Dalton"],
   5: ["Lucas Trindade", "Pedro", "Mateus Santos"],
   6: ["Matheus Senhorinho", "João Paulo", "Geraldo"],
   7: ["Danilo Pereira dos Santos", "Eduardo Lima", "Geraldo", "Victor Costa"],
   8: ["Lucas Trindade", "Wilson Ramos", "Dalton"],
   9: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Danilo Pereira dos Santos", "Dalton"],
-  10: ["Ricardo Lima", "Danilo Pereira dos Santos", "Eric da Conceição", "Victor Costa"],
+  10: ["Ricardo Lima", "Danilo Pereira dos Santos", "Victor Costa"],
   11: ["Pedro", "João Paulo", "Geraldo", "Mateus Santos"],
   12: ["Matheus Senhorinho", "Dalton", "Eduardo Lima"],
   13: ["Wilson Ramos", "Danilo Pereira dos Santos", "Eduardo Lima"],
-  14: ["Lucas Trindade", "Ricardo Lima", "Eric da Conceição"],
+  14: ["Lucas Trindade", "Ricardo Lima"],
   15: ["João Paulo", "Geraldo", "Mateus Santos", "Victor Costa"],
   16: ["Eduardo Lima", "João Paulo", "Geraldo", "Mateus Santos", "Victor Costa"],
   17: ["Lucas Trindade", "Pedro"],
   18: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Dalton"],
-  19: ["Wilson Ramos", "Geraldo", "Eric da Conceição"],
+  19: ["Wilson Ramos", "Geraldo"],
   20: ["Ricardo Lima", "João Paulo", "Mateus Santos"],
   21: ["Eduardo Lima", "Mateus Santos", "Victor Costa"],
-  22: ["Lucas Trindade", "Matheus Senhorinho", "Pedro", "Eric da Conceição"],
-  23: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Pedro", "Eric da Conceição"],
+  22: ["Lucas Trindade", "Matheus Senhorinho", "Pedro"],
+  23: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Pedro"],
   24: ["Danilo Pereira dos Santos", "Dalton"],
   25: ["Ricardo Lima", "João Paulo", "Geraldo"],
   26: ["Wilson Ramos", "João Paulo", "Victor Costa"],
   27: ["Danilo Pereira dos Santos", "Eduardo Lima", "Mateus Santos", "Victor Costa"],
-  28: ["Matheus Senhorinho", "Pedro", "Eric da Conceição"],
+  28: ["Matheus Senhorinho", "Pedro"],
   29: ["Lucas Trindade", "Ricardo Lima", "Dalton"],
   30: ["Lucas Trindade", "Wilson Ramos", "Ricardo Lima", "Dalton"],
   31: ["João Paulo", "Geraldo"]
@@ -104,28 +114,28 @@ const escalaManualJulho = {
     G12: "Geraldo"
   },
   4: {
-    G6: "Eric da Conceição",
+    G6: "João Paulo",
     G8: "Danilo Pereira dos Santos",
     G5: "Lucas Trindade",
     G2: "Miranda",
-    G1: "João Paulo",
+    G1: "Ricardo Lima",
     R1: "Wilson Ramos",
     R2: "Matheus Senhorinho",
     G10: "Fechada",
     G11: "Fechada",
     G13: "Mateus Santos",
-    G12: "Fechada"
+    G12: "Geraldo"
   },
   5: {
     G6: "Wilson Ramos",
-    G8: "Eric da Conceição",
+    G8: "Geraldo",
     G5: "Matheus Senhorinho",
     G2: "Danilo Pereira dos Santos",
     G1: "Lucas Trindade",
     R1: "Miranda",
     R2: "João Paulo",
     G10: "Fechada",
-    G11: "Fechada",
+    G11: "Pedro",
     G13: "Mateus Santos",
     G12: "Fechada"
   }
@@ -556,7 +566,7 @@ function configurarSelectorMes() {
     gerarEscala(mesSelecionado);
     criarBotoesDias();
     preencherFuncionarios();
-    mostrarDia(1);
+    mostrarDia(obterDiaParaMostrar());
     renderizarResumos();
   });
 
@@ -568,5 +578,5 @@ gerarEscala();
 criarBotoesDias();
 preencherFuncionarios();
 configurarSelectorMes();
-mostrarDia(hoje);
+mostrarDia(obterDiaParaMostrar());
 renderizarResumos();
