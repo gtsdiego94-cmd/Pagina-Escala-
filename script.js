@@ -10,6 +10,7 @@ const funcionarios = [
   "Eduardo Lima",
   "João Paulo",
   "Geraldo",
+  "Eric da Conceição",
   "Victor Costa",
   "Mateus Santos"
 ];
@@ -104,13 +105,13 @@ const escalaManualJulho = {
     G8: "Matheus Senhorinho",
     G5: "Ricardo Lima",
     G2: "Victor Costa",
-    G1: "João Paulo",
+    G1: "Eric da Conceição",
     R1: "Danilo Pereira dos Santos",
     R2: "Miranda",
     G10: "Pedro",
-    G11: "Geraldo",
+    G11: "João Paulo",
     G13: "Fechada",
-    G12: "Mateus Santos"
+    G12: "Geraldo"
   },
   4: {
     G6: "João Paulo",
@@ -171,7 +172,8 @@ function normalizarNome(nome) {
   return String(nome)
     .replace(/khauan\s+santos/i, "Miranda")
     .replace(/kauan\s+santos/i, "Miranda")
-    .replace(/kau[aã]\s+geraldo(?:\s+dos)?\s+santos/i, "Geraldo");
+    .replace(/kau[aã]\s+geraldo(?:\s+dos)?\s+santos/i, "Geraldo")
+    .replace(/erick\s+da\s+conceição/i, "Eric da Conceição");
 }
 
 function confirmarChegada(posto) {
