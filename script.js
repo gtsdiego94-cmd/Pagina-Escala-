@@ -15,8 +15,24 @@ const funcionarios = [
   "Mateus Santos"
 ];
 
-const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G13", "G12"];
+const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G13",];
 const fortes = ["G6", "G8", "G5", "G2", "G1"];
+const gruposPostos = {
+  "🔥 Prioridade mínima": ["G6", "G8", "G5", "G2", "G1", "R1"],
+  "🟢 Segunda rendição": ["R2"],
+  "🔵 Máquinas extras": ["G10", "G11", "G13", "G12"]
+};
+const metas = [
+  ["GRU01", "R$ 4.000,00", "R$ 5.000,00", "—"],
+  ["GRU02", "R$ 4.000,00", "R$ 4.500,00", "—"],
+  ["GRU05", "R$ 6.500,00", "R$ 6.000,00", "R$ 2.500,00"],
+  ["GRU06", "R$ 8.000,00", "R$ 13.000,00", "R$ 2.800,00"],
+  ["GRU08", "R$ 7.500,00", "R$ 10.500,00", "R$ 6.200,00"],
+  ["GRU10", "R$ 4.000,00", "R$ 6.250,00", "R$ 2.250,00"],
+  ["GRU11", "R$ 4.200,00", "R$ 5.800,00", "R$ 4.700,00"],
+  ["GRU12", "R$ 4.500,00", "R$ 4.500,00", "—"],
+  ["GRU13", "R$ 2.500,00", "R$ 1.250,00", "—"]
+];
 const hojeData = new Date();
 const hoje = hojeData.getDate();
 const mesAtual = hojeData.getMonth();
@@ -311,12 +327,6 @@ function mostrarDia(dia) {
   const mesNumero = String(configMes.mes + 1).padStart(2, "0");
   titulo.textContent = `Escala do dia ${String(dia).padStart(2, "0")}/${mesNumero}/${configMes.ano}`;
 
-  const grupos = {
-    "🔥 Prioridade mínima": ["G6", "G8", "G5", "G2", "G1", "R1"],
-    "🟢 Segunda rendição": ["R2"],
-    "🔵 Máquinas extras": ["G10", "G11", "G13", "G12"]
-  };
-
   const folgas = escala[dia].folgas || [];
   const postosFortes = Object.entries(escala[dia]).filter(([posto, pessoa]) => fortes.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
   const postosOcupados = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa && pessoa !== "SEM COBERTURA" && pessoa !== "Fechada").length;
@@ -332,10 +342,10 @@ function mostrarDia(dia) {
 
   let html = `<div class="painel-dia">`;
 
-  Object.keys(grupos).forEach(tituloGrupo => {
+  Object.keys(gruposPostos).forEach(tituloGrupo => {
     html += `<h3>${tituloGrupo}</h3><div class="cards-grid">`;
 
-    grupos[tituloGrupo].forEach(posto => {
+    gruposPostos[tituloGrupo].forEach(posto => {
       const pessoa = escala[dia][posto] || "SEM COBERTURA";
       const fechada = pessoa === "SEM COBERTURA" || pessoa === "Fechada";
 
@@ -345,7 +355,7 @@ function mostrarDia(dia) {
           <div class="posto-pessoa">${fechada ? "FECHADA / SEM COBERTURA" : pessoa}</div>
 
 ${
-  ["G6", "G8", "G5", "G2", "G1"].includes(posto) && !fechada
+  fortes.includes(posto) && !fechada
     ? `<button class="btn-cheguei" onclick="confirmarChegada('${posto}')">
         ${statusPresenca[diaAtual]?.[posto] === "chegou" ? "✅ Confirmado" : "Confirmar chegada"}
       </button>`
@@ -540,8 +550,14 @@ function mostrarResumoMaquinas() {
 function classePosto(posto) {
   if (posto === "Folga" || posto === "F") return "folga";
   if (posto === "R1" || posto === "R2") return "rendicao";
-  if (["G6", "G8", "G5", "G2", "G1"].includes(posto)) return "forte";
+  if (fortes.includes(posto)) return "forte";
   return "maquina";
+}
+
+function preencherMetas() {
+  document.getElementById("metas-body").innerHTML = metas
+    .map(linha => `<tr>${linha.map(valor => `<td>${valor}</td>`).join("")}</tr>`)
+    .join("");
 }
 
 function renderizarResumos() {
@@ -578,5 +594,6 @@ gerarEscala();
 criarBotoesDias();
 preencherFuncionarios();
 configurarSelectorMes();
+preencherMetas();
 mostrarDia(obterDiaParaMostrar());
 renderizarResumos();
