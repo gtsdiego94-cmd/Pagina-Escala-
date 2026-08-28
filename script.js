@@ -279,6 +279,47 @@ function registrarContagem(dia) {
   });
 }
 
+function editarDia(dia) {
+  const resultado = document.getElementById("resultado");
+  const escalaDia = escala[dia];
+  const opcoes = ["Fechada", ...funcionarios];
+
+  resultado.insertAdjacentHTML("afterbegin", `
+    <form class="editor-dia" onsubmit="salvarEdicaoDia(event, ${dia})">
+      <h3>Editar escala deste dia</h3>
+      <div class="editor-grid">
+        ${postos.map(posto => `
+          <label>
+            <span>${posto}</span>
+            <select name="${posto}" required>
+              ${opcoes.map(nome => `<option value="${nome}" ${escalaDia[posto] === nome ? "selected" : ""}>${nome}</option>`).join("")}
+            </select>
+          </label>
+        `).join("")}
+      </div>
+      <div class="editor-acoes">
+        <button class="btn-cheguei" type="submit">Salvar alteração</button>
+        <button class="ghost-btn" type="button" onclick="mostrarDia(${dia})">Cancelar</button>
+      </div>
+    </form>
+  `);
+}
+
+function salvarEdicaoDia(event, dia) {
+  event.preventDefault();
+  const dados = new FormData(event.currentTarget);
+  const escalaManual = {};
+
+  postos.forEach(posto => {
+    escalaManual[posto] = dados.get(posto);
+  });
+
+  mesesDisponiveis[mesSelecionado].escalaManual[dia] = escalaManual;
+  gerarEscala(mesSelecionado);
+  renderizarResumos();
+  mostrarDia(dia);
+}
+
 function criarBotoesDias() {
   const diasDiv = document.getElementById("dias");
   diasDiv.innerHTML = "";
@@ -341,6 +382,7 @@ function mostrarDia(dia) {
   atualizarBotoesDias();
 
   let html = `<div class="painel-dia">`;
+  html += `<button class="ghost-btn editar-dia-btn" type="button" onclick="editarDia(${dia})">Editar este dia</button>`;
 
   Object.keys(gruposPostos).forEach(tituloGrupo => {
     html += `<h3>${tituloGrupo}</h3><div class="cards-grid">`;

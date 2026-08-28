@@ -535,6 +535,46 @@ main {
   outline-offset: 2px;
 }
 
+.editor-dia {
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.editor-dia h3 {
+  margin-top: 0;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.editor-grid label {
+  display: grid;
+  gap: 6px;
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.editor-grid select {
+  margin: 0;
+}
+
+.editor-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.editar-dia-btn {
+  margin-bottom: 16px;
+}
+
 .search-input,
 select {
   width: 100%;
