@@ -52,6 +52,23 @@ function obterDiaParaMostrar() {
   return 1;
 }
 
+async function carregarEdicoesSalvas() {
+  const { data, error } = await supabaseClient
+    .from("escala_edicoes")
+    .select("mes, dia, escala");
+
+  if (error) {
+    console.warn("Não foi possível carregar as edições salvas.", error.message);
+    return;
+  }
+
+  data.forEach(edicao => {
+    if (mesesDisponiveis[edicao.mes]) {
+      mesesDisponiveis[edicao.mes].escalaManual[edicao.dia] = edicao.escala;
+    }
+  });
+}
+
 function atualizarAcessoAdmin() {
   const loginForm = document.getElementById("loginForm");
   const logoutButton = document.getElementById("logoutButton");
@@ -363,8 +380,10 @@ function editarDia(dia) {
   `);
 }
 
-function salvarEdicaoDia(event, dia) {
+async function salvarEdicaoDia(event, dia) {
   event.preventDefault();
+  if (!usuarioAdmin) return;
+
   const dados = new FormData(event.currentTarget);
   const escalaManual = {};
 
@@ -372,10 +391,24 @@ function salvarEdicaoDia(event, dia) {
     escalaManual[posto] = dados.get(posto);
   });
 
+  const status = document.getElementById("loginStatus");
+  status.textContent = "Salvando alteração...";
+
+  const { error } = await supabaseClient
+    .from("escala_edicoes")
+    .upsert({ mes: mesSelecionado, dia, escala: escalaManual }, { onConflict: "mes,dia" });
+
+  if (error) {
+    status.textContent = "Não foi possível salvar. Verifique a tabela no Supabase.";
+    console.error(error);
+    return;
+  }
+
   mesesDisponiveis[mesSelecionado].escalaManual[dia] = escalaManual;
   gerarEscala(mesSelecionado);
   renderizarResumos();
   mostrarDia(dia);
+  status.textContent = `Administrador conectado: ${usuarioAdmin.email}`;
 }
 
 function criarBotoesDias() {
@@ -690,11 +723,16 @@ function configurarSelectorMes() {
   select.value = mesSelecionado;
 }
 
-gerarEscala();
-criarBotoesDias();
-preencherFuncionarios();
-configurarSelectorMes();
-preencherMetas();
-mostrarDia(obterDiaParaMostrar());
-renderizarResumos();
-iniciarAutenticacao();
+async function inicializarPagina() {
+  await carregarEdicoesSalvas();
+  gerarEscala();
+  criarBotoesDias();
+  preencherFuncionarios();
+  configurarSelectorMes();
+  preencherMetas();
+  mostrarDia(obterDiaParaMostrar());
+  renderizarResumos();
+  await iniciarAutenticacao();
+}
+
+inicializarPagina();
