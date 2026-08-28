@@ -38,6 +38,11 @@ const hoje = hojeData.getDate();
 const mesAtual = hojeData.getMonth();
 const anoAtual = hojeData.getFullYear();
 let diaSelecionado = 1;
+let usuarioAdmin = null;
+const supabaseClient = window.supabase.createClient(
+  "https://ohelcxrqunxijpbpzivn.supabase.co",
+  "sb_publishable_maWNEaXNb3dq-Oasa9ATaA_uh345fkc"
+);
 
 function obterDiaParaMostrar() {
   const configMes = mesesDisponiveis[mesSelecionado];
@@ -45,6 +50,58 @@ function obterDiaParaMostrar() {
     return hoje;
   }
   return 1;
+}
+
+function atualizarAcessoAdmin() {
+  const loginForm = document.getElementById("loginForm");
+  const logoutButton = document.getElementById("logoutButton");
+  const status = document.getElementById("loginStatus");
+  const editorButton = document.querySelector(".editar-dia-btn");
+
+  loginForm.hidden = Boolean(usuarioAdmin);
+  logoutButton.hidden = !usuarioAdmin;
+  status.textContent = usuarioAdmin ? `Administrador conectado: ${usuarioAdmin.email}` : "";
+  if (editorButton) editorButton.hidden = !usuarioAdmin;
+}
+
+async function iniciarAutenticacao() {
+  const loginForm = document.getElementById("loginForm");
+  const logoutButton = document.getElementById("logoutButton");
+  const status = document.getElementById("loginStatus");
+
+  loginForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    status.textContent = "Entrando...";
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: document.getElementById("loginEmail").value,
+      password: document.getElementById("loginPassword").value
+    });
+
+    if (error) {
+      status.textContent = "E-mail ou senha inválidos.";
+      return;
+    }
+
+    usuarioAdmin = data.user;
+    loginForm.reset();
+    atualizarAcessoAdmin();
+    mostrarDia(diaAtual);
+  });
+
+  logoutButton.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    usuarioAdmin = null;
+    atualizarAcessoAdmin();
+    mostrarDia(diaAtual);
+  });
+
+  const { data } = await supabaseClient.auth.getSession();
+  usuarioAdmin = data.session?.user || null;
+  atualizarAcessoAdmin();
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    usuarioAdmin = session?.user || null;
+    atualizarAcessoAdmin();
+  });
 }
 
 const folgasPorDia = {
@@ -280,6 +337,7 @@ function registrarContagem(dia) {
 }
 
 function editarDia(dia) {
+  if (!usuarioAdmin) return;
   const resultado = document.getElementById("resultado");
   const escalaDia = escala[dia];
   const opcoes = ["Fechada", ...funcionarios];
@@ -382,7 +440,7 @@ function mostrarDia(dia) {
   atualizarBotoesDias();
 
   let html = `<div class="painel-dia">`;
-  html += `<button class="ghost-btn editar-dia-btn" type="button" onclick="editarDia(${dia})">Editar este dia</button>`;
+  html += `<button class="ghost-btn editar-dia-btn" type="button" onclick="editarDia(${dia})" ${usuarioAdmin ? "" : "hidden"}>Editar este dia</button>`;
 
   Object.keys(gruposPostos).forEach(tituloGrupo => {
     html += `<h3>${tituloGrupo}</h3><div class="cards-grid">`;
@@ -639,3 +697,4 @@ configurarSelectorMes();
 preencherMetas();
 mostrarDia(obterDiaParaMostrar());
 renderizarResumos();
+iniciarAutenticacao();

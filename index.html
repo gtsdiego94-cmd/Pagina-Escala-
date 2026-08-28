@@ -33,6 +33,15 @@
         </div>
       </div>
       <div class="hero-badge">Julho 2026</div>
+      <div class="admin-access">
+        <form id="loginForm" class="login-form">
+          <input id="loginEmail" type="email" placeholder="E-mail do administrador" autocomplete="username" required>
+          <input id="loginPassword" type="password" placeholder="Senha" autocomplete="current-password" required>
+          <button class="ghost-btn" type="submit">Entrar</button>
+        </form>
+        <div id="loginStatus" class="login-status" role="status"></div>
+        <button id="logoutButton" class="ghost-btn" type="button" hidden>Sair</button>
+      </div>
     </div>
   </header>
 
@@ -162,6 +171,7 @@
   </aside>
   </div>
 
-  <script src="script.js?v=20260731"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js?v=20260828"></script>
 </body>
 </html>
