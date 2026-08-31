@@ -14,12 +14,12 @@ const funcionarios = [
   "Jose Ramos"
 ];
 
-const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G12", "G13"];
+const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G12", "G4", "G13"];
 const fortes = ["G6", "G8", "G5", "G2", "G1"];
 const gruposPostos = {
   "🔥 Prioridade mínima": ["G6", "G8", "G5", "G2", "G1", "R1"],
   "🟢 Segunda rendição": ["R2"],
-  "🔵 Máquinas extras": ["G10", "G11", "G13", "G12"]
+  "🔵 Máquinas extras": ["G10", "G11", "G13", "G12","G4"]
 };
 const metas = [
   ["GRU01", "R$ 4.000,00", "R$ 5.000,00", "—"],
