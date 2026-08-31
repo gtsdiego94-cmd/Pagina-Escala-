@@ -256,7 +256,7 @@ const mesesDisponiveis = {
     escalaManual: {},
     inativos: ["Eric da Conceição", "Mateus Santos"],
     postosInativos: ["G11", "G12"],
-    observacoes: {}
+    observacoes: {posto-x-é-apoio }
   }
 };
 
