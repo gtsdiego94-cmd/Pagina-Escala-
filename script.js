@@ -10,11 +10,11 @@ const funcionarios = [
   "Eduardo Lima",
   "João Paulo",
   "Geraldo",
-  "jose Ramos",
-  "Victor Costa"
+  "Victor Costa",
+  "Jose Ramos"
 ];
 
-const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G13",];
+const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G12", "G13"];
 const fortes = ["G6", "G8", "G5", "G2", "G1"];
 const gruposPostos = {
   "🔥 Prioridade mínima": ["G6", "G8", "G5", "G2", "G1", "R1"],
@@ -188,46 +188,43 @@ const folgasPorDiaAgosto = {
   31: ["João Paulo", "Geraldo"]
 };
 
+const folgasPorDiaSetembro = {
+  1: ["Danilo Pereira dos Santos", "Miranda", "Jose Ramos"],
+  2: ["Dalton", "Pedro", "Eduardo Lima", "Victor Costa"],
+  3: ["Matheus Senhorinho", "Dalton"],
+  4: ["Lucas Trindade", "Ricardo Lima", "Geraldo"],
+  5: ["Wilson Ramos", "Danilo Pereira dos Santos", "Eduardo Lima", "João Paulo", "Jose Ramos"],
+  6: ["Wilson Ramos", "Danilo Pereira dos Santos", "Eduardo Lima", "João Paulo"],
+  7: ["Miranda", "Pedro", "Victor Costa"],
+  8: ["Ricardo Lima", "Dalton", "Victor Costa"],
+  9: ["Matheus Senhorinho", "Eduardo Lima", "Jose Ramos"],
+  10: ["Lucas Trindade", "Wilson Ramos", "Miranda", "João Paulo"],
+  11: ["Victor Costa"],
+  12: ["Matheus Senhorinho", "Dalton", "Pedro", "Geraldo"],
+  13: ["Matheus Senhorinho", "Danilo Pereira dos Santos", "Dalton", "Pedro", "Geraldo"],
+  14: ["Ricardo Lima", "Jose Ramos"],
+  15: ["Miranda", "Eduardo Lima", "Jose Ramos"],
+  16: ["Lucas Trindade", "Victor Costa"],
+  17: ["Wilson Ramos", "João Paulo"],
+  18: ["Danilo Pereira dos Santos", "Dalton", "Pedro"],
+  19: ["Matheus Senhorinho", "Miranda", "Geraldo", "Jose Ramos"],
+  20: ["Lucas Trindade", "Matheus Senhorinho", "Ricardo Lima", "Danilo Pereira dos Santos", "Miranda", "Geraldo", "Jose Ramos"],
+  21: ["Ricardo Lima", "Danilo Pereira dos Santos", "Eduardo Lima"],
+  22: ["Lucas Trindade", "Pedro", "João Paulo", "Victor Costa"],
+  23: ["Lucas Trindade", "Pedro", "Jose Ramos"],
+  24: ["Wilson Ramos", "Dalton"],
+  25: ["Matheus Senhorinho", "Ricardo Lima", "Danilo Pereira dos Santos"],
+  26: ["Wilson Ramos", "Miranda", "Eduardo Lima", "João Paulo"],
+  27: ["Lucas Trindade", "Wilson Ramos", "Miranda", "Eduardo Lima", "João Paulo", "Victor Costa"],
+  28: ["Lucas Trindade", "Pedro", "Victor Costa"],
+  29: ["Ricardo Lima", "Geraldo"],
+  30: ["Ricardo Lima", "Dalton"]
+};
+
 const escalaManualJulho = {
-  1: {
-    G6: "Lucas Trindade",
-    G8: "Matheus Senhorinho",
-    G5: "Ricardo Lima",
-    G2: "Victor Costa",
-    G1: "Eric da Conceição",
-    R1: "Danilo Pereira dos Santos",
-    R2: "Miranda",
-    G10: "Pedro",
-    G11: "João Paulo",
-    G13: "Fechada",
-    G12: "Geraldo"
-  },
-  4: {
-    G6: "João Paulo",
-    G8: "Danilo Pereira dos Santos",
-    G5: "Lucas Trindade",
-    G2: "Miranda",
-    G1: "Ricardo Lima",
-    R1: "Wilson Ramos",
-    R2: "Matheus Senhorinho",
-    G10: "Fechada",
-    G11: "Fechada",
-    G13: "Mateus Santos",
-    G12: "Geraldo"
-  },
-  5: {
-    G6: "Wilson Ramos",
-    G8: "Geraldo",
-    G5: "Matheus Senhorinho",
-    G2: "Danilo Pereira dos Santos",
-    G1: "Lucas Trindade",
-    R1: "Miranda",
-    R2: "João Paulo",
-    G10: "Fechada",
-    G11: "Pedro",
-    G13: "Mateus Santos",
-    G12: "Fechada"
-  }
+  1: { G6: "Lucas Trindade", G8: "Matheus Senhorinho", G5: "Ricardo Lima", G2: "Victor Costa", G1: "Eric da Conceição", R1: "Danilo Pereira dos Santos", R2: "Miranda", G10: "Pedro", G11: "João Paulo", G13: "Fechada", G12: "Geraldo" },
+  4: { G6: "João Paulo", G8: "Danilo Pereira dos Santos", G5: "Lucas Trindade", G2: "Miranda", G1: "Ricardo Lima", R1: "Wilson Ramos", R2: "Matheus Senhorinho", G10: "Fechada", G11: "Fechada", G13: "Mateus Santos", G12: "Geraldo" },
+  5: { G6: "Wilson Ramos", G8: "Geraldo", G5: "Matheus Senhorinho", G2: "Danilo Pereira dos Santos", G1: "Lucas Trindade", R1: "Miranda", R2: "João Paulo", G10: "Fechada", G11: "Pedro", G13: "Mateus Santos", G12: "Fechada" }
 };
 
 const mesesDisponiveis = {
@@ -237,6 +234,8 @@ const mesesDisponiveis = {
     mes: 6,
     folgasPorDia,
     escalaManual: escalaManualJulho,
+    inativos: [],
+    postosInativos: [],
     observacoes: {}
   },
   agosto: {
@@ -245,6 +244,18 @@ const mesesDisponiveis = {
     mes: 7,
     folgasPorDia: folgasPorDiaAgosto,
     escalaManual: {},
+    inativos: [],
+    postosInativos: [],
+    observacoes: {}
+  },
+  setembro: {
+    label: "Setembro 2026",
+    ano: 2026,
+    mes: 8,
+    folgasPorDia: folgasPorDiaSetembro,
+    escalaManual: {},
+    inativos: ["Eric da Conceição", "Mateus Santos"],
+    postosInativos: ["G11", "G12"],
     observacoes: {}
   }
 };
@@ -253,7 +264,7 @@ let escala = {};
 let contagem = {};
 let diaAtual = 1;
 let statusPresenca = {};
-let mesSelecionado = "julho";
+let mesSelecionado = "setembro";
 
 function normalizarNome(nome) {
   if (!nome) return nome;
@@ -262,7 +273,9 @@ function normalizarNome(nome) {
     .replace(/khauan\s+santos/i, "Miranda")
     .replace(/kauan\s+santos/i, "Miranda")
     .replace(/kau[aã]\s+geraldo(?:\s+dos)?\s+santos/i, "Geraldo")
-    .replace(/erick\s+da\s+conceição/i, "Eric da Conceição");
+    .replace(/erick\s+da\s+conceição/i, "Eric da Conceição")
+    .replace(/danilo\s+pereira\s+do\s+santos/i, "Danilo Pereira dos Santos")
+    .replace(/jos[eé]\s+ramos/i, "Jose Ramos");
 }
 
 function confirmarChegada(posto) {
@@ -283,6 +296,8 @@ function iniciarContagem() {
 function gerarEscala(mesKey = mesSelecionado) {
   const configMes = mesesDisponiveis[mesKey];
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
+  const listaInativos = configMes.inativos || [];
+  const postosInativos = configMes.postosInativos || [];
 
   iniciarContagem();
   escala = {};
@@ -301,9 +316,15 @@ function gerarEscala(mesKey = mesSelecionado) {
       continue;
     }
 
-    let disponiveis = funcionarios.filter(nome => !folgas.includes(nome));
+    let disponiveis = funcionarios.filter(nome => !folgas.includes(nome) && !listaInativos.includes(nome));
 
     postos.forEach(posto => {
+      // Bloqueia atribuição em postos inativos
+      if (postosInativos.includes(posto)) {
+        escala[dia][posto] = "Fechada";
+        return;
+      }
+
       if (disponiveis.length === 0) {
         escala[dia][posto] = "SEM COBERTURA";
         return;
@@ -329,13 +350,11 @@ function escolherMelhorFuncionario(lista, posto) {
     if (contagem[a][posto] !== contagem[b][posto]) {
       return contagem[a][posto] - contagem[b][posto];
     }
-
     if (fortes.includes(posto)) {
       if (contagem[a].fortes !== contagem[b].fortes) {
         return contagem[a].fortes - contagem[b].fortes;
       }
     }
-
     return contagem[a].total - contagem[b].total;
   })[0];
 }
@@ -343,7 +362,6 @@ function escolherMelhorFuncionario(lista, posto) {
 function registrarContagem(dia) {
   postos.forEach(posto => {
     const nome = escala[dia][posto];
-
     if (funcionarios.includes(nome)) {
       contagem[nome][posto]++;
       contagem[nome].total++;
@@ -570,6 +588,7 @@ function mostrarFuncionario(nome) {
   const configMes = mesesDisponiveis[mesSelecionado];
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
   const mesNumero = String(configMes.mes + 1).padStart(2, "0");
+  const listaInativos = configMes.inativos || [];
 
   if (!nome) {
     div.innerHTML = '<div class="funcionario"><p>Digite ou selecione um funcionário para visualizar o mês.</p></div>';
@@ -581,7 +600,9 @@ function mostrarFuncionario(nome) {
   for (let dia = 1; dia <= totalDias; dia++) {
     let postoDoFuncionario = "Folga";
 
-    if (!escala[dia].folgas.includes(nome)) {
+    if (listaInativos.includes(nome)) {
+       postoDoFuncionario = "Inativo/Férias";
+    } else if (!escala[dia].folgas.includes(nome)) {
       postoDoFuncionario = postos.find(posto => escala[dia][posto] === nome) || "Apoio";
     }
 
@@ -608,19 +629,25 @@ function mostrarResumoFolgas() {
 
   const configMes = mesesDisponiveis[mesSelecionado];
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
+  const listaInativos = configMes.inativos || [];
 
   funcionarios.forEach(nome => {
     let folgas = 0;
     let trabalhados = 0;
 
     for (let dia = 1; dia <= totalDias; dia++) {
-      if (escala[dia].folgas.includes(nome)) folgas++;
-      else trabalhados++;
+      if (listaInativos.includes(nome)) {
+         folgas++;
+      } else if (escala[dia].folgas.includes(nome)) {
+         folgas++;
+      } else {
+         trabalhados++;
+      }
     }
 
     html += `
       <tr>
-        <td>${nome}</td>
+        <td>${nome} ${listaInativos.includes(nome) ? '(Inativo)' : ''}</td>
         <td>${trabalhados}</td>
         <td class="folga">${folgas}</td>
       </tr>
@@ -650,22 +677,22 @@ function mostrarResumoMaquinas() {
 
   const configMes = mesesDisponiveis[mesSelecionado];
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
+  const listaInativos = configMes.inativos || [];
 
   funcionarios.forEach(nome => {
+    if(listaInativos.includes(nome)) return; 
+    
     html += `<tr><td>${nome}</td>`;
 
     postos.forEach(posto => {
       let qtd = 0;
-
       for (let dia = 1; dia <= totalDias; dia++) {
         if (escala[dia][posto] === nome) qtd++;
       }
-
       html += `<td>${qtd}</td>`;
     });
 
     let totalFortes = 0;
-
     for (let dia = 1; dia <= totalDias; dia++) {
       fortes.forEach(posto => {
         if (escala[dia][posto] === nome) totalFortes++;
@@ -680,7 +707,7 @@ function mostrarResumoMaquinas() {
 }
 
 function classePosto(posto) {
-  if (posto === "Folga" || posto === "F") return "folga";
+  if (posto === "Folga" || posto === "F" || posto === "Inativo/Férias") return "folga";
   if (posto === "R1" || posto === "R2") return "rendicao";
   if (fortes.includes(posto)) return "forte";
   return "maquina";
@@ -702,6 +729,12 @@ function configurarSelectorMes() {
   const botao = document.getElementById("botaoMes");
   const menu = document.getElementById("menuMes");
   const select = document.getElementById("mesSelect");
+
+  if (select) {
+    select.innerHTML = Object.keys(mesesDisponiveis)
+      .map(key => `<option value="${key}">${mesesDisponiveis[key].label}</option>`)
+      .join("");
+  }
 
   botao.addEventListener("click", () => {
     menu.hidden = !menu.hidden;
