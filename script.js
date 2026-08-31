@@ -41,7 +41,6 @@ const anoAtual = hojeData.getFullYear();
 let diaSelecionado = 1;
 let usuarioAdmin = null;
 
-// Verifica se o supabase foi carregado no HTML antes de criar o cliente
 const supabaseClient = window.supabase ? window.supabase.createClient(
   "https://ohelcxrqunxijpbpzivn.supabase.co",
   "sb_publishable_maWNEaXNb3dq-Oasa9ATaA_uh345fkc"
@@ -278,7 +277,6 @@ let mesSelecionado = "setembro";
 
 function normalizarNome(nome) {
   if (!nome) return nome;
-
   return String(nome)
     .replace(/khauan\s+santos/i, "Miranda")
     .replace(/kauan\s+santos/i, "Miranda")
@@ -386,7 +384,10 @@ function editarDia(dia) {
   if (!resultado) return;
   
   const escalaDia = escala[dia];
-  const opcoes = ["Fechada", ...funcionarios];
+  const configMes = mesesDisponiveis[mesSelecionado];
+  const listaInativos = configMes.inativos || [];
+  const ativos = funcionarios.filter(nome => !listaInativos.includes(nome));
+  const opcoes = ["Fechada", ...ativos];
 
   resultado.insertAdjacentHTML("afterbegin", `
     <form class="editor-dia" onsubmit="salvarEdicaoDia(event, ${dia})">
@@ -565,15 +566,19 @@ function preencherFuncionarios() {
 
   if (!select) return;
 
+  const configMes = mesesDisponiveis[mesSelecionado];
+  const listaInativos = configMes.inativos || [];
+  const ativos = funcionarios.filter(nome => !listaInativos.includes(nome));
+
   select.innerHTML = `<option value="">Selecione o funcionário</option>`;
-  funcionarios.forEach(nome => {
+  ativos.forEach(nome => {
     const option = document.createElement("option");
     option.value = nome;
     option.textContent = nome;
     select.appendChild(option);
   });
 
-  if(resumo) resumo.textContent = funcionarios.length;
+  if(resumo) resumo.textContent = ativos.length;
 
   select.addEventListener("change", () => mostrarFuncionario(select.value));
   if(busca) busca.addEventListener("input", () => filtrarFuncionarios(select, busca));
@@ -657,15 +662,16 @@ function mostrarResumoFolgas() {
   const configMes = mesesDisponiveis[mesSelecionado];
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
   const listaInativos = configMes.inativos || [];
+  
+  // Oculta os funcionários inativos da lista de resumo
+  const ativos = funcionarios.filter(nome => !listaInativos.includes(nome));
 
-  funcionarios.forEach(nome => {
+  ativos.forEach(nome => {
     let folgas = 0;
     let trabalhados = 0;
 
     for (let dia = 1; dia <= totalDias; dia++) {
-      if (listaInativos.includes(nome)) {
-         folgas++;
-      } else if (escala[dia] && escala[dia].folgas.includes(nome)) {
+      if (escala[dia] && escala[dia].folgas.includes(nome)) {
          folgas++;
       } else {
          trabalhados++;
@@ -674,7 +680,7 @@ function mostrarResumoFolgas() {
 
     html += `
       <tr>
-        <td>${nome} ${listaInativos.includes(nome) ? '(Inativo)' : ''}</td>
+        <td>${nome}</td>
         <td>${trabalhados}</td>
         <td class="folga">${folgas}</td>
       </tr>
@@ -706,10 +712,11 @@ function mostrarResumoMaquinas() {
   const configMes = mesesDisponiveis[mesSelecionado];
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
   const listaInativos = configMes.inativos || [];
+  
+  // Oculta os funcionários inativos da lista de máquinas
+  const ativos = funcionarios.filter(nome => !listaInativos.includes(nome));
 
-  funcionarios.forEach(nome => {
-    if(listaInativos.includes(nome)) return; 
-    
+  ativos.forEach(nome => {
     html += `<tr><td>${nome}</td>`;
 
     postos.forEach(posto => {
