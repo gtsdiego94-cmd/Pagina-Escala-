@@ -10,16 +10,18 @@ const funcionarios = [
   "Eduardo Lima",
   "João Paulo",
   "Geraldo",
+  "Eric da Conceição",
   "Victor Costa",
+  "Mateus Santos",
   "Jose Ramos"
 ];
 
-const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G12", "G4", "G13"];
+const postos = ["G6", "G8", "G5", "G2", "G1", "R1", "R2", "G10", "G11", "G12", "G13"];
 const fortes = ["G6", "G8", "G5", "G2", "G1"];
 const gruposPostos = {
   "🔥 Prioridade mínima": ["G6", "G8", "G5", "G2", "G1", "R1"],
-  "🟢 Segunda rendição": ["R2", "X"],
-  "🔵 Máquinas extras": ["G10", "G11", "G13", "G12","G4"]
+  "🟢 Segunda rendição": ["R2"],
+  "🔵 Máquinas extras": ["G10", "G11", "G13", "G12"]
 };
 const metas = [
   ["GRU01", "R$ 4.000,00", "R$ 5.000,00", "—"],
@@ -38,10 +40,12 @@ const mesAtual = hojeData.getMonth();
 const anoAtual = hojeData.getFullYear();
 let diaSelecionado = 1;
 let usuarioAdmin = null;
-const supabaseClient = window.supabase.createClient(
+
+// Verifica se o supabase foi carregado no HTML antes de criar o cliente
+const supabaseClient = window.supabase ? window.supabase.createClient(
   "https://ohelcxrqunxijpbpzivn.supabase.co",
   "sb_publishable_maWNEaXNb3dq-Oasa9ATaA_uh345fkc"
-);
+) : null;
 
 function obterDiaParaMostrar() {
   const configMes = mesesDisponiveis[mesSelecionado];
@@ -52,6 +56,7 @@ function obterDiaParaMostrar() {
 }
 
 async function carregarEdicoesSalvas() {
+  if (!supabaseClient) return;
   const { data, error } = await supabaseClient
     .from("escala_edicoes")
     .select("mes, dia, escala");
@@ -74,42 +79,47 @@ function atualizarAcessoAdmin() {
   const status = document.getElementById("loginStatus");
   const editorButton = document.querySelector(".editar-dia-btn");
 
-  loginForm.hidden = Boolean(usuarioAdmin);
-  logoutButton.hidden = !usuarioAdmin;
-  status.textContent = usuarioAdmin ? `Administrador conectado: ${usuarioAdmin.email}` : "";
+  if (loginForm) loginForm.hidden = Boolean(usuarioAdmin);
+  if (logoutButton) logoutButton.hidden = !usuarioAdmin;
+  if (status) status.textContent = usuarioAdmin ? `Administrador conectado: ${usuarioAdmin.email}` : "";
   if (editorButton) editorButton.hidden = !usuarioAdmin;
 }
 
 async function iniciarAutenticacao() {
+  if (!supabaseClient) return;
   const loginForm = document.getElementById("loginForm");
   const logoutButton = document.getElementById("logoutButton");
   const status = document.getElementById("loginStatus");
 
-  loginForm.addEventListener("submit", async event => {
-    event.preventDefault();
-    status.textContent = "Entrando...";
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: document.getElementById("loginEmail").value,
-      password: document.getElementById("loginPassword").value
+  if (loginForm) {
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      if(status) status.textContent = "Entrando...";
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: document.getElementById("loginEmail").value,
+        password: document.getElementById("loginPassword").value
+      });
+
+      if (error) {
+        if(status) status.textContent = "E-mail ou senha inválidos.";
+        return;
+      }
+
+      usuarioAdmin = data.user;
+      loginForm.reset();
+      atualizarAcessoAdmin();
+      mostrarDia(diaAtual);
     });
+  }
 
-    if (error) {
-      status.textContent = "E-mail ou senha inválidos.";
-      return;
-    }
-
-    usuarioAdmin = data.user;
-    loginForm.reset();
-    atualizarAcessoAdmin();
-    mostrarDia(diaAtual);
-  });
-
-  logoutButton.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    usuarioAdmin = null;
-    atualizarAcessoAdmin();
-    mostrarDia(diaAtual);
-  });
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      usuarioAdmin = null;
+      atualizarAcessoAdmin();
+      mostrarDia(diaAtual);
+    });
+  }
 
   const { data } = await supabaseClient.auth.getSession();
   usuarioAdmin = data.session?.user || null;
@@ -256,7 +266,7 @@ const mesesDisponiveis = {
     escalaManual: {},
     inativos: ["Eric da Conceição", "Mateus Santos"],
     postosInativos: ["G11", "G12"],
-    observacoes: {posto-x-é-apoio }
+    observacoes: {}
   }
 };
 
@@ -295,6 +305,7 @@ function iniciarContagem() {
 
 function gerarEscala(mesKey = mesSelecionado) {
   const configMes = mesesDisponiveis[mesKey];
+  if (!configMes) return;
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
   const listaInativos = configMes.inativos || [];
   const postosInativos = configMes.postosInativos || [];
@@ -310,7 +321,7 @@ function gerarEscala(mesKey = mesSelecionado) {
       folgas.push("Miranda");
     }
 
-    if (configMes.escalaManual[dia]) {
+    if (configMes.escalaManual && configMes.escalaManual[dia]) {
       escala[dia] = { ...configMes.escalaManual[dia], folgas };
       registrarContagem(dia);
       continue;
@@ -319,7 +330,6 @@ function gerarEscala(mesKey = mesSelecionado) {
     let disponiveis = funcionarios.filter(nome => !folgas.includes(nome) && !listaInativos.includes(nome));
 
     postos.forEach(posto => {
-      // Bloqueia atribuição em postos inativos
       if (postosInativos.includes(posto)) {
         escala[dia][posto] = "Fechada";
         return;
@@ -373,6 +383,8 @@ function registrarContagem(dia) {
 function editarDia(dia) {
   if (!usuarioAdmin) return;
   const resultado = document.getElementById("resultado");
+  if (!resultado) return;
+  
   const escalaDia = escala[dia];
   const opcoes = ["Fechada", ...funcionarios];
 
@@ -399,7 +411,7 @@ function editarDia(dia) {
 
 async function salvarEdicaoDia(event, dia) {
   event.preventDefault();
-  if (!usuarioAdmin) return;
+  if (!usuarioAdmin || !supabaseClient) return;
 
   const dados = new FormData(event.currentTarget);
   const escalaManual = {};
@@ -409,14 +421,14 @@ async function salvarEdicaoDia(event, dia) {
   });
 
   const status = document.getElementById("loginStatus");
-  status.textContent = "Salvando alteração...";
+  if(status) status.textContent = "Salvando alteração...";
 
   const { error } = await supabaseClient
     .from("escala_edicoes")
     .upsert({ mes: mesSelecionado, dia, escala: escalaManual }, { onConflict: "mes,dia" });
 
   if (error) {
-    status.textContent = "Não foi possível salvar. Verifique a tabela no Supabase.";
+    if(status) status.textContent = "Não foi possível salvar. Verifique a tabela no Supabase.";
     console.error(error);
     return;
   }
@@ -425,11 +437,12 @@ async function salvarEdicaoDia(event, dia) {
   gerarEscala(mesSelecionado);
   renderizarResumos();
   mostrarDia(dia);
-  status.textContent = `Administrador conectado: ${usuarioAdmin.email}`;
+  if(status) status.textContent = `Administrador conectado: ${usuarioAdmin.email}`;
 }
 
 function criarBotoesDias() {
   const diasDiv = document.getElementById("dias");
+  if (!diasDiv) return;
   diasDiv.innerHTML = "";
 
   const configMes = mesesDisponiveis[mesSelecionado];
@@ -467,10 +480,11 @@ function atualizarBotoesDias() {
 
 function mostrarDia(dia) {
   diaAtual = dia;
-
   const resultado = document.getElementById("resultado");
   const titulo = document.getElementById("titulo-dia");
   diaSelecionado = dia;
+
+  if (!resultado || !titulo || !escala[dia]) return;
 
   const configMes = mesesDisponiveis[mesSelecionado];
   const mesNumero = String(configMes.mes + 1).padStart(2, "0");
@@ -482,11 +496,18 @@ function mostrarDia(dia) {
   const semCobertura = Object.entries(escala[dia]).filter(([posto, pessoa]) => postos.includes(posto) && pessoa === "SEM COBERTURA").length;
   const observacoes = mesSelecionado === "agosto" && dia >= 3 ? ["Miranda em férias a partir do dia 3."] : [];
 
-  document.getElementById("resumoDia").textContent = String(dia).padStart(2, "0");
-  document.getElementById("resumoFolgas").textContent = folgas.length;
-  document.getElementById("resumoPostos").textContent = postosFortes;
-  document.getElementById("resumoOcupados").textContent = postosOcupados;
-  document.getElementById("resumoSemCobertura").textContent = semCobertura;
+  const rDia = document.getElementById("resumoDia");
+  const rFolgas = document.getElementById("resumoFolgas");
+  const rPostos = document.getElementById("resumoPostos");
+  const rOcupados = document.getElementById("resumoOcupados");
+  const rSem = document.getElementById("resumoSemCobertura");
+
+  if(rDia) rDia.textContent = String(dia).padStart(2, "0");
+  if(rFolgas) rFolgas.textContent = folgas.length;
+  if(rPostos) rPostos.textContent = postosFortes;
+  if(rOcupados) rOcupados.textContent = postosOcupados;
+  if(rSem) rSem.textContent = semCobertura;
+  
   atualizarBotoesDias();
 
   let html = `<div class="painel-dia">`;
@@ -540,8 +561,11 @@ ${
 function preencherFuncionarios() {
   const select = document.getElementById("funcionarioSelect");
   const busca = document.getElementById("funcionarioBusca");
-  select.innerHTML = `<option value="">Selecione o funcionário</option>`;
+  const resumo = document.getElementById("resumoFuncionarios");
 
+  if (!select) return;
+
+  select.innerHTML = `<option value="">Selecione o funcionário</option>`;
   funcionarios.forEach(nome => {
     const option = document.createElement("option");
     option.value = nome;
@@ -549,10 +573,10 @@ function preencherFuncionarios() {
     select.appendChild(option);
   });
 
-  document.getElementById("resumoFuncionarios").textContent = funcionarios.length;
+  if(resumo) resumo.textContent = funcionarios.length;
 
   select.addEventListener("change", () => mostrarFuncionario(select.value));
-  busca.addEventListener("input", () => filtrarFuncionarios(select, busca));
+  if(busca) busca.addEventListener("input", () => filtrarFuncionarios(select, busca));
 }
 
 function filtrarFuncionarios(select, busca) {
@@ -585,6 +609,8 @@ function filtrarFuncionarios(select, busca) {
 
 function mostrarFuncionario(nome) {
   const div = document.getElementById("resultadoFuncionario");
+  if (!div) return;
+
   const configMes = mesesDisponiveis[mesSelecionado];
   const totalDias = new Date(configMes.ano, configMes.mes + 1, 0).getDate();
   const mesNumero = String(configMes.mes + 1).padStart(2, "0");
@@ -602,7 +628,7 @@ function mostrarFuncionario(nome) {
 
     if (listaInativos.includes(nome)) {
        postoDoFuncionario = "Inativo/Férias";
-    } else if (!escala[dia].folgas.includes(nome)) {
+    } else if (escala[dia] && !escala[dia].folgas.includes(nome)) {
       postoDoFuncionario = postos.find(posto => escala[dia][posto] === nome) || "Apoio";
     }
 
@@ -615,6 +641,7 @@ function mostrarFuncionario(nome) {
 
 function mostrarResumoFolgas() {
   const main = document.querySelector("main");
+  if(!main) return;
 
   let html = `
     <section class="card resumo-mes-section">
@@ -638,7 +665,7 @@ function mostrarResumoFolgas() {
     for (let dia = 1; dia <= totalDias; dia++) {
       if (listaInativos.includes(nome)) {
          folgas++;
-      } else if (escala[dia].folgas.includes(nome)) {
+      } else if (escala[dia] && escala[dia].folgas.includes(nome)) {
          folgas++;
       } else {
          trabalhados++;
@@ -660,6 +687,7 @@ function mostrarResumoFolgas() {
 
 function mostrarResumoMaquinas() {
   const main = document.querySelector("main");
+  if(!main) return;
 
   let html = `
     <section class="card resumo-mes-section">
@@ -687,7 +715,7 @@ function mostrarResumoMaquinas() {
     postos.forEach(posto => {
       let qtd = 0;
       for (let dia = 1; dia <= totalDias; dia++) {
-        if (escala[dia][posto] === nome) qtd++;
+        if (escala[dia] && escala[dia][posto] === nome) qtd++;
       }
       html += `<td>${qtd}</td>`;
     });
@@ -695,7 +723,7 @@ function mostrarResumoMaquinas() {
     let totalFortes = 0;
     for (let dia = 1; dia <= totalDias; dia++) {
       fortes.forEach(posto => {
-        if (escala[dia][posto] === nome) totalFortes++;
+        if (escala[dia] && escala[dia][posto] === nome) totalFortes++;
       });
     }
 
@@ -714,9 +742,12 @@ function classePosto(posto) {
 }
 
 function preencherMetas() {
-  document.getElementById("metas-body").innerHTML = metas
-    .map(linha => `<tr>${linha.map(valor => `<td>${valor}</td>`).join("")}</tr>`)
-    .join("");
+  const tbody = document.getElementById("metas-body");
+  if (tbody) {
+    tbody.innerHTML = metas
+      .map(linha => `<tr>${linha.map(valor => `<td>${valor}</td>`).join("")}</tr>`)
+      .join("");
+  }
 }
 
 function renderizarResumos() {
@@ -734,37 +765,44 @@ function configurarSelectorMes() {
     select.innerHTML = Object.keys(mesesDisponiveis)
       .map(key => `<option value="${key}">${mesesDisponiveis[key].label}</option>`)
       .join("");
+
+    select.addEventListener("change", () => {
+      mesSelecionado = select.value;
+      if (menu) menu.hidden = true;
+      if (botao) botao.textContent = `Mês: ${mesesDisponiveis[mesSelecionado].label}`;
+      gerarEscala(mesSelecionado);
+      criarBotoesDias();
+      preencherFuncionarios();
+      mostrarDia(obterDiaParaMostrar());
+      renderizarResumos();
+    });
+
+    select.value = mesSelecionado;
   }
 
-  botao.addEventListener("click", () => {
-    menu.hidden = !menu.hidden;
-  });
-
-  select.addEventListener("change", () => {
-    mesSelecionado = select.value;
-    menu.hidden = true;
+  if (botao && menu) {
+    botao.addEventListener("click", () => {
+      menu.hidden = !menu.hidden;
+    });
     botao.textContent = `Mês: ${mesesDisponiveis[mesSelecionado].label}`;
-    gerarEscala(mesSelecionado);
-    criarBotoesDias();
-    preencherFuncionarios();
-    mostrarDia(obterDiaParaMostrar());
-    renderizarResumos();
-  });
-
-  botao.textContent = `Mês: ${mesesDisponiveis[mesSelecionado].label}`;
-  select.value = mesSelecionado;
+  }
 }
 
 async function inicializarPagina() {
-  await carregarEdicoesSalvas();
-  gerarEscala();
-  criarBotoesDias();
-  preencherFuncionarios();
-  configurarSelectorMes();
-  preencherMetas();
-  mostrarDia(obterDiaParaMostrar());
-  renderizarResumos();
-  await iniciarAutenticacao();
+  try {
+    await carregarEdicoesSalvas();
+    gerarEscala();
+    criarBotoesDias();
+    preencherFuncionarios();
+    configurarSelectorMes();
+    preencherMetas();
+    mostrarDia(obterDiaParaMostrar());
+    renderizarResumos();
+    await iniciarAutenticacao();
+  } catch (erro) {
+    console.error("Erro no JavaScript:", erro);
+    alert("Ops! Alguma função travou: " + erro.message + "\n\nAperte F12 e olhe a aba Console para mais detalhes.");
+  }
 }
 
 inicializarPagina();
