@@ -266,6 +266,14 @@ const mesesDisponiveis = {
     inativos: ["Eric da Conceição", "Mateus Santos"],
     postosInativos: ["G11", "G12"],
     observacoes: {}
+  },
+  setembro: {
+    label: "Setembro 2026",
+    ano: 2026,
+    mes: 8,
+    folgasPorDia: folgasPorDiaSetembro,
+    escalaManual: {},
+    observacoes: {}
   }
 };
 
@@ -274,6 +282,18 @@ let contagem = {};
 let diaAtual = 1;
 let statusPresenca = {};
 let mesSelecionado = "setembro";
+
+function prepararEscalaManualSetembro() {
+  const configMes = mesesDisponiveis.setembro;
+  gerarEscala("setembro");
+
+  for (let dia = 1; dia <= 30; dia++) {
+    configMes.escalaManual[dia] = {};
+    postos.forEach(posto => {
+      configMes.escalaManual[dia][posto] = escala[dia][posto];
+    });
+  }
+}
 
 function normalizarNome(nome) {
   if (!nome) return nome;
@@ -626,21 +646,33 @@ function mostrarFuncionario(nome) {
     return;
   }
 
-  let html = `<div class="funcionario"><strong>${nome}</strong><br><br>`;
+  let html = `
+    <div class="funcionario">
+      <strong>${nome}</strong>
+      <span class="funcionario-mes">${configMes.label}</span>
+      <table class="funcionario-escala">
+        <thead><tr><th>Dia</th><th>Situação</th><th>Máquina</th></tr></thead>
+        <tbody>
+  `;
 
   for (let dia = 1; dia <= totalDias; dia++) {
-    let postoDoFuncionario = "Folga";
+    const estaDeFolga = escala[dia].folgas.includes(nome);
+    let postoDoFuncionario = estaDeFolga
+      ? "Folga"
+      : postos.find(posto => escala[dia][posto] === nome) || "Apoio";
 
-    if (listaInativos.includes(nome)) {
-       postoDoFuncionario = "Inativo/Férias";
-    } else if (escala[dia] && !escala[dia].folgas.includes(nome)) {
-      postoDoFuncionario = postos.find(posto => escala[dia][posto] === nome) || "Apoio";
-    }
+    if (listaInativos.includes(nome)) postoDoFuncionario = "Inativo/Férias";
 
-    html += `${String(dia).padStart(2, "0")}/${mesNumero} - <span class="${classePosto(postoDoFuncionario)}">${postoDoFuncionario}</span><br>`;
+    html += `
+      <tr>
+        <td>${String(dia).padStart(2, "0")}</td>
+        <td>${estaDeFolga ? "Folga" : "Trabalhando"}</td>
+        <td><span class="${classePosto(postoDoFuncionario)}">${postoDoFuncionario}</span></td>
+      </tr>
+    `;
   }
 
-  html += "</div>";
+  html += "</tbody></table></div>";
   div.innerHTML = html;
 }
 
@@ -812,4 +844,5 @@ async function inicializarPagina() {
   }
 }
 
+prepararEscalaManualSetembro();
 inicializarPagina();
