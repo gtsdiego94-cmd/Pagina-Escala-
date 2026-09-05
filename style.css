@@ -654,23 +654,6 @@ table tr:nth-child(even) {
   border: 1px solid var(--border);
 }
 
-.funcionario-mes {
-  display: block;
-  margin: 6px 0 14px;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.funcionario-escala {
-  margin-top: 12px;
-  text-align: left;
-}
-
-.funcionario-escala th,
-.funcionario-escala td {
-  padding: 8px 10px;
-}
-
 .maquina {
   color: var(--primary-dark);
   font-weight: 700;

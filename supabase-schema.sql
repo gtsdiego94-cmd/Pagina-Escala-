@@ -28,10 +28,3 @@ create policy "Administrador pode atualizar edicoes"
 
 grant select on public.escala_edicoes to anon, authenticated;
 grant insert, update on public.escala_edicoes to authenticated;
-
-alter table public.escala_edicoes
-  drop constraint if exists escala_edicoes_mes_check;
-
-alter table public.escala_edicoes
-  add constraint escala_edicoes_mes_check
-  check (mes in ('julho', 'agosto', 'setembro'));
